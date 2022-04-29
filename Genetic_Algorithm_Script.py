@@ -1,5 +1,8 @@
+#All the features before starting the class could be changed/modified; 
+#The individual number, elite population, tournament selection, mutation rate and desire character can be modified.
+
 import random
-INDIVIDUAL_NUMBER = 15
+INDIVIDUAL_NUMBER = 15 
 ELITE_POPULATION = 2
 Tournament_selection = 4
 Mutation_rate = 0.1
