@@ -1,0 +1,1 @@
+1. Which cell lines are cancer cell line and which are normal cell lines? how to identify them, without going thourgh google search to find them. Also which two cell line should we compare, do we compare all normal cell line with all cancerous cell line? and within population of use of same nanoparticles?
