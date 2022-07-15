@@ -3,17 +3,23 @@ import random
 import matplotlib.pyplot as plt
 import joblib
 import sklearn
+import pickle
+
 individual_char = ['rand_cell_type', 'rand_test', 'rand_material', 'rand_time', 'rand_conc', 'viability', 'rand_hd', 'rand_zeta']
 population_size = 50    # number of individuals in generation
 max_generations = 50    # maximal number of generations
 elite_group = 5 # top 5 compounds which have highest fitness score after random feature (they are not exposed to mutation and crossover)
 desired_fitness = 0.9
-
 prob_crossover = 0.8    # probability of each gene exchange
 prob_mutation = 0.1
-
+Tournament_selection = 4
 db = pd.read_csv('Database/Cytotoxicity.csv')   # here the toxicity database is loaded
-#trained_model = joblib.load('ML_models/Trained_model.joblib')
+with open('ML_models/scaler.pkl', 'rb') as f:
+    scaler = pickle.load(f)
+#scaled_values = scaler.fit_transform(values)
+with open('ML_models/encoder.pkl', 'rb') as file:
+    encoder = pickle.load(file)
+trained_model = joblib.load('ML_models/Trained_model.joblib')
 
 class Individual: # create a random individual with random characteristics that consist feature similar to original data
     def __init__(self):
@@ -33,6 +39,8 @@ class Individual: # create a random individual with random characteristics that 
         rand_hd = random.choice(hd)
         rand_zeta = random.choice(zeta)
         self.individual = [rand_cell_type, rand_test, rand_material, rand_time, rand_conc, viability, rand_hd, rand_zeta]
+        self.to_transform_scaler = [rand_time, rand_conc, rand_hd, rand_zeta]
+        self.to_trasform_encoder = [rand_cell_type, rand_material, rand_test]
         self.fitness = 0
 
     def get_individual(self): # return the individual feature for further processing
@@ -105,6 +113,17 @@ class GeneticAlgorithm:
                     char.get_individual()[i] = random.choice()[i]
                 else:
                     char.get_individual()[i] = random.choice()[i]
+
+    @staticmethod
+    def select_tournament_individuals(feature):
+        tournament_individual = Population(0)
+        i = 0
+        while i < Tournament_selection:
+            tournament_individual.get_individual().append(
+                feature.get_individual()[random.randrange(0, population_size)])
+            i += 1
+        tournament_individual.get_individual().sort(key=lambda x: x.get_fitness(), reverse=True)
+        return tournament_individual
 
 def print_all_feature(feature, generation):
     print("\n ........")
