@@ -1,0 +1,8 @@
+PC12 		N
+RAW264.7 	N
+VERO		N
+MDCK		N
+Caco-2		C
+
+
+
